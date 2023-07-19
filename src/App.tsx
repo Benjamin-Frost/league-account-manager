@@ -31,6 +31,13 @@ export function App() {
     await storeAccounts(newAccounts);
   };
 
+  const handleDeleteAccount = async (index: number) => {
+    const newAccounts = [...accounts];
+    newAccounts.splice(index, 1);
+    setAccounts(newAccounts);
+    await storeAccounts(newAccounts);
+  };
+
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-8">
       <Header
@@ -41,10 +48,11 @@ export function App() {
       />
       <AccountsTable
         accounts={accounts}
-        onEditAccountClick={(index) => {
+        onEditClick={(index) => {
           setEditingAccountId(index);
           setIsAccountModalOpen(true);
         }}
+        onDeleteClick={handleDeleteAccount}
       />
       <AccountModal
         isOpen={isAccountModalOpen}
