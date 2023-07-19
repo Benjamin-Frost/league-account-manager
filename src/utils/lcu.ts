@@ -1,6 +1,6 @@
+import { invoke } from '@tauri-apps/api';
 import { readTextFile } from '@tauri-apps/api/fs';
 import { join, localDataDir } from '@tauri-apps/api/path';
-import axios from 'axios';
 
 const parseLockfile = async () => {
   const dataDirPath = await localDataDir();
@@ -19,21 +19,8 @@ const parseLockfile = async () => {
 
 export const login = async (username: string, password: string) => {
   const { port, secret, protocol } = await parseLockfile();
-
-  const response = await axios.put(
-    `${protocol}://127.0.0.1:${port}/rso-auth/v1/session/credentials`,
-    {
-      username,
-      password,
-      persistLogin: false,
-    },
-    {
-      auth: {
-        username: 'riot',
-        password: secret,
-      },
-    }
+  const url = `${protocol}://127.0.0.1:${port}/rso-auth/v1/session/credentials`;
+  await invoke('lcu_login', { url, secret, username, password }).catch((err) =>
+    console.error(err)
   );
-
-  return response.data;
 };
