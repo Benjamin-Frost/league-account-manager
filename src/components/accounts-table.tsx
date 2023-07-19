@@ -1,17 +1,10 @@
 import { Account } from '../interfaces/account';
 
-const accounts: Account[] = [
-  {
-    username: 'user1',
-    password: 'pass1',
-  },
-  {
-    username: 'user2',
-    password: 'pass2',
-  },
-];
+interface AccountsTableProps {
+  accounts: Account[];
+}
 
-export function AccountsTable() {
+export function AccountsTable({ accounts }: AccountsTableProps) {
   return (
     <table className="min-w-full mt-8 divide-y divide-gray-700">
       <thead>
