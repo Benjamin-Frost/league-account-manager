@@ -1,35 +1,11 @@
-import { invoke } from '@tauri-apps/api/tauri';
-import { useState } from 'react';
+import { AccountsTable } from './components/accounts-table';
+import { Header } from './components/header';
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState('');
-  const [name, setName] = useState('');
-
-  async function greet() {
-    setGreetMsg(await invoke('greet', { name }));
-  }
-
+export function App() {
   return (
-    <>
-      <h1 className="text-3xl text-amber-500">Welcome to Tauri!</h1>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </>
+    <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-8">
+      <Header />
+      <AccountsTable />
+    </div>
   );
 }
-
-export default App;
