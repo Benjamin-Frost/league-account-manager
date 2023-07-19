@@ -2,9 +2,13 @@ import { Account } from '../interfaces/account';
 
 interface AccountsTableProps {
   accounts: Account[];
+  onEditAccountClick: (index: number) => void;
 }
 
-export function AccountsTable({ accounts }: AccountsTableProps) {
+export function AccountsTable({
+  accounts,
+  onEditAccountClick,
+}: AccountsTableProps) {
   return (
     <table className="min-w-full mt-8 divide-y divide-gray-700">
       <thead>
@@ -36,9 +40,13 @@ export function AccountsTable({ accounts }: AccountsTableProps) {
               {account.password}
             </td>
             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-              <a href="#" className="text-blue-400 hover:text-blue-300">
+              <button
+                type="button"
+                className="text-blue-400 hover:text-blue-300"
+                onClick={() => onEditAccountClick(index)}
+              >
                 Edit<span className="sr-only">, {account.username}</span>
-              </a>
+              </button>
             </td>
           </tr>
         ))}

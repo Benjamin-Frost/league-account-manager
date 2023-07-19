@@ -1,22 +1,32 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 interface AccountModalProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  onAddAccount: (username: string, password: string) => void;
+  onSubmit: (username: string, password: string) => void;
+  initialData?: {
+    username: string;
+    password: string;
+  };
 }
 
 export function AccountModal({
   isOpen,
   setIsOpen,
-  onAddAccount,
+  onSubmit,
+  initialData,
 }: AccountModalProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleAddAccount = () => {
-    onAddAccount(username, password);
+  useEffect(() => {
+    setUsername(initialData?.username ?? '');
+    setPassword(initialData?.password ?? '');
+  }, [initialData]);
+
+  const handleSubmit = () => {
+    onSubmit(username, password);
     setUsername('');
     setPassword('');
     setIsOpen(false);
@@ -89,9 +99,9 @@ export function AccountModal({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    onClick={handleAddAccount}
+                    onClick={handleSubmit}
                   >
-                    Add Account
+                    {initialData ? 'Save Changes' : 'Add Account'}
                   </button>
                 </div>
               </Dialog.Panel>

@@ -8,6 +8,7 @@ import { loadAccounts, storeAccounts } from './utils/io';
 export function App() {
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [editingAccountId, setEditingAccountId] = useState<number | null>(null);
 
   useEffect(() => {
     const loadAccountsAsync = async () => {
@@ -22,14 +23,38 @@ export function App() {
     await storeAccounts([...accounts, { username, password }]);
   };
 
+  const handleEditAccount = async (username: string, password: string) => {
+    if (editingAccountId === null) return;
+    const newAccounts = [...accounts];
+    newAccounts[editingAccountId] = { username, password };
+    setAccounts(newAccounts);
+    await storeAccounts(newAccounts);
+  };
+
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-8">
-      <Header onAddAccountClick={() => setIsAccountModalOpen(true)} />
-      <AccountsTable accounts={accounts} />
+      <Header
+        onAddAccountClick={() => {
+          setEditingAccountId(null);
+          setIsAccountModalOpen(true);
+        }}
+      />
+      <AccountsTable
+        accounts={accounts}
+        onEditAccountClick={(index) => {
+          setEditingAccountId(index);
+          setIsAccountModalOpen(true);
+        }}
+      />
       <AccountModal
         isOpen={isAccountModalOpen}
         setIsOpen={setIsAccountModalOpen}
-        onAddAccount={handleAddAccount}
+        onSubmit={
+          editingAccountId === null ? handleAddAccount : handleEditAccount
+        }
+        initialData={
+          editingAccountId === null ? undefined : accounts[editingAccountId]
+        }
       />
     </div>
   );
