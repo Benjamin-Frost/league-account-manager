@@ -23,7 +23,10 @@
         "exists": true,
         "readFile": true,
         "writeFile": true,
-        "scope": ["$APPDATA", "$APPDATA/*"]
+        "scope": ["$APPDATA", "$APPDATA/*", "$LOCALDATA/**"]
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
