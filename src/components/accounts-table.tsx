@@ -1,14 +1,20 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowRightCircleIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from '@heroicons/react/24/solid';
 import { Account } from '../interfaces/account';
 
 interface AccountsTableProps {
   accounts: Account[];
+  onLoginClick: (index: number) => void;
   onEditClick: (index: number) => void;
   onDeleteClick: (index: number) => void;
 }
 
 export function AccountsTable({
   accounts,
+  onLoginClick,
   onEditClick,
   onDeleteClick,
 }: AccountsTableProps) {
@@ -43,6 +49,14 @@ export function AccountsTable({
               {account.password}
             </td>
             <td className="relative whitespace-nowrap space-x-2 py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+              <button
+                type="button"
+                className="text-blue-400 hover:text-blue-300"
+                onClick={() => onLoginClick(index)}
+              >
+                <ArrowRightCircleIcon className="w-5 h-5" />
+                <span className="sr-only">Login {account.username}</span>
+              </button>
               <button
                 type="button"
                 className="text-blue-400 hover:text-blue-300"

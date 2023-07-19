@@ -4,6 +4,7 @@ import { AccountsTable } from './components/accounts-table';
 import { Header } from './components/header';
 import { Account } from './interfaces/account';
 import { loadAccounts, storeAccounts } from './utils/io';
+import { login } from './utils/lcu';
 
 export function App() {
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
@@ -38,6 +39,11 @@ export function App() {
     await storeAccounts(newAccounts);
   };
 
+  const handleLoginAccount = (index: number) => {
+    const account = accounts[index];
+    login(account.username, account.password);
+  };
+
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-8">
       <Header
@@ -48,6 +54,7 @@ export function App() {
       />
       <AccountsTable
         accounts={accounts}
+        onLoginClick={handleLoginAccount}
         onEditClick={(index) => {
           setEditingAccountId(index);
           setIsAccountModalOpen(true);
