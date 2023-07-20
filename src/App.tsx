@@ -32,7 +32,9 @@ export function App() {
       try {
         const accountInfo = await getAccountInfo();
         const index = newAccounts.findIndex(
-          (account) => account.username === accountInfo.username
+          (account) =>
+            account.username.toLowerCase() ===
+            accountInfo.username.toLowerCase()
         );
         if (index !== -1) {
           newAccounts[index] = {
@@ -45,10 +47,11 @@ export function App() {
             wins: accountInfo.rankedStats?.wins,
             losses: accountInfo.rankedStats?.losses,
           };
-          setAccounts(newAccounts);
-          await storeAccounts(newAccounts);
         }
       } catch (e) {}
+
+      setAccounts(newAccounts);
+      await storeAccounts(newAccounts);
     }, 30000);
     return () => clearInterval(interval);
   }, []);
