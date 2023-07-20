@@ -12,6 +12,26 @@ interface AccountsTableProps {
   onDeleteClick: (index: number) => void;
 }
 
+const eloToString = (account: Account) => {
+  if (
+    account.tier === undefined ||
+    account.division === undefined ||
+    account.lp === undefined
+  ) {
+    return '–';
+  }
+
+  return `${account.tier} ${account.division} ${account.lp} LP`;
+};
+
+const winLossToString = (account: Account) => {
+  if (account.wins === undefined || account.losses === undefined) {
+    return '–';
+  }
+
+  return `${account.wins}/${account.losses}`;
+};
+
 export function AccountsTable({
   accounts,
   onLoginClick,
@@ -86,22 +106,10 @@ export function AccountsTable({
               {account.summonerName ?? '–'}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {account.tier && account.division && account.lp ? (
-                <>
-                  {account.tier} {account.division} {account.lp} LP
-                </>
-              ) : (
-                '–'
-              )}
+              {eloToString(account)}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {account.wins && account.losses ? (
-                <>
-                  {account.wins}/{account.losses}
-                </>
-              ) : (
-                '–'
-              )}
+              {winLossToString(account)}
             </td>
             <td className="relative whitespace-nowrap space-x-2 py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
               <button
