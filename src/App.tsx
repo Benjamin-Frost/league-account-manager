@@ -54,7 +54,7 @@ export function App() {
       await storeAccounts(newAccounts);
     }, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [accounts]);
 
   const handleAddAccount = async (username: string, password: string) => {
     setAccounts((accounts) => [...accounts, { username, password }]);
