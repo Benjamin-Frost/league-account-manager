@@ -6,7 +6,8 @@ import { Header } from './components/header';
 import { ToastType, showToast } from './components/toast';
 import { Account } from './interfaces/account';
 import { loadAccounts, storeAccounts } from './utils/io';
-import { login } from './utils/lcu';
+import { getAccountInfo } from './utils/lcu';
+import { login } from './utils/riot-client';
 
 export function App() {
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
@@ -19,6 +20,18 @@ export function App() {
       setAccounts(accounts);
     };
     loadAccountsAsync();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const accountInfo = await getAccountInfo();
+        console.log(accountInfo);
+      } catch (e) {
+        console.error(e);
+      }
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleAddAccount = async (username: string, password: string) => {

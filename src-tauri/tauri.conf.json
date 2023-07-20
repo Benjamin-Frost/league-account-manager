@@ -23,7 +23,7 @@
         "exists": true,
         "readFile": true,
         "writeFile": true,
-        "scope": ["$APPDATA", "$APPDATA/*", "$LOCALDATA/**"]
+        "scope": ["$APPDATA", "$APPDATA/*", "$LOCALDATA/**", "/Riot Games/**"]
       },
       "path": {
         "all": true

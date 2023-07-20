@@ -6,7 +6,7 @@ use sysinfo::{System, SystemExt};
 use serde::{Serialize, Deserialize};
 
 #[tauri::command]
-async fn lcu_login(url: String, secret: String, username: String, password: String) -> Result<(), Error> {
+async fn login(url: String, secret: String, username: String, password: String) -> Result<(), Error> {
     if is_league_client_running() {
         return Err(Error::AlreadyLoggedInError);
     }
@@ -31,7 +31,7 @@ async fn lcu_login(url: String, secret: String, username: String, password: Stri
     }
 
     let body = response.text().await.unwrap();
-    let json = serde_json::from_str::<RiotAuthResponse>(&body).unwrap();
+    let json = serde_json::from_str::<AuthResponse>(&body).unwrap();
 
     if json.error == "auth_failure" {
         return Err(Error::WrongCredentialsError);
@@ -44,6 +44,84 @@ async fn lcu_login(url: String, secret: String, username: String, password: Stri
     }
 }
 
+#[tauri::command]
+async fn get_session(url: String, secret: String) -> Result<SessionResponse, Error> {
+    let client = ClientBuilder::new()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .unwrap();
+
+    let request = client
+    .get(url)
+    .basic_auth("riot", Some(secret))
+    .send()
+    .await;
+
+    let response = request.unwrap();
+    let status = response.status();
+
+    if status != StatusCode::OK {
+        return Err(Error::LcuNotReachableError);
+    }
+
+    let body = response.text().await.unwrap();
+    let json = serde_json::from_str::<SessionResponse>(&body).unwrap();
+
+    Ok(json)
+}
+
+#[tauri::command]
+async fn get_summoner(url: String, secret: String) -> Result<SummonerResponse, Error> {
+    let client = ClientBuilder::new()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .unwrap();
+
+    let request = client
+    .get(url)
+    .basic_auth("riot", Some(secret))
+    .send()
+    .await;
+
+    let response = request.unwrap();
+    let status = response.status();
+
+    if status != StatusCode::OK {
+        return Err(Error::LcuNotReachableError);
+    }
+
+    let body = response.text().await.unwrap();
+    let json = serde_json::from_str::<SummonerResponse>(&body).unwrap();
+
+    Ok(json)
+}
+
+#[tauri::command]
+async fn get_ranked(url: String, secret: String) -> Result<RankedStatsResponse, Error> {
+    let client = ClientBuilder::new()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .unwrap();
+
+    let request = client
+    .get(url)
+    .basic_auth("riot", Some(secret))
+    .send()
+    .await;
+
+    let response = request.unwrap();
+    let status = response.status();
+
+    if status != StatusCode::OK {
+        return Err(Error::LcuNotReachableError);
+    }
+
+    let body = response.text().await.unwrap();
+    let json = serde_json::from_str::<RankedStatsResponse>(&body).unwrap();
+
+    Ok(json)
+}
+
 fn is_league_client_running() -> bool {
     let s = System::new_all();
     for _ in s.processes_by_name("LeagueClientUx") {
@@ -53,20 +131,50 @@ fn is_league_client_running() -> bool {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct RiotAuthResponse {
+struct AuthResponse {
     error: String,
     #[serde(rename = "type")]
     response_type: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct SessionResponse {
+    username: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct SummonerResponse {
+    #[serde(rename = "displayName")]
+    display_name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct RankedQueueResponse {
+    tier: String,
+    division: String,
+    #[serde(rename = "leaguePoints")]
+    league_points: u32,
+    wins: u32,
+    losses: u32,
+    #[serde(rename = "queueType")]
+    queue_type: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct RankedStatsResponse {
+    queues: Vec<RankedQueueResponse>,
 }
 
 #[derive(Debug, thiserror::Error)]
 enum Error {
     #[error("You are already logged in")]
     AlreadyLoggedInError,
-    #[error("Please start the League Client first")]
+    #[error("Please start the Riot Client first")]
     RiotClientNotRunningError,
     #[error("The account credentials are wrong")]
     WrongCredentialsError,
+    #[error("The LCU is not reachable")]
+    LcuNotReachableError,
     #[error("An unknown error occured")]
     UnknownError,
 }
@@ -82,9 +190,10 @@ impl Serialize for Error {
     }
 }
 
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![lcu_login])
+        .invoke_handler(tauri::generate_handler![login, get_session, get_summoner, get_ranked])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
