@@ -1,10 +1,15 @@
 import { Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
-import { XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import toast from 'react-hot-toast';
 
-export const showErrorToast = (title: string, message: string) => {
+export enum ToastType {
+  Success,
+  Error,
+}
+
+export const showToast = (title: string, message: string, type: ToastType) => {
   toast.custom((t) => (
     <Transition
       show={t.visible}
@@ -20,10 +25,17 @@ export const showErrorToast = (title: string, message: string) => {
         <div className="p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              <XCircleIcon
-                className="h-6 w-6 text-red-400"
-                aria-hidden="true"
-              />
+              {type === ToastType.Success ? (
+                <CheckCircleIcon
+                  className="h-6 w-6 text-green-400"
+                  aria-hidden="true"
+                />
+              ) : (
+                <XCircleIcon
+                  className="h-6 w-6 text-red-400"
+                  aria-hidden="true"
+                />
+              )}
             </div>
             <div className="ml-3 w-0 flex-1 pt-0.5">
               <p className="text-sm font-medium text-white">{title}</p>

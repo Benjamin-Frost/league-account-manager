@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AccountModal } from './components/account-modal';
 import { AccountsTable } from './components/accounts-table';
-import { showErrorToast } from './components/error-toast';
 import { Header } from './components/header';
+import { ToastType, showToast } from './components/toast';
 import { Account } from './interfaces/account';
 import { loadAccounts, storeAccounts } from './utils/io';
 import { login } from './utils/lcu';
@@ -46,12 +46,17 @@ export function App() {
 
     try {
       await login(account.username, account.password);
+      showToast(
+        'Login successful!',
+        'You have been logged in',
+        ToastType.Success
+      );
     } catch (e) {
       const message =
         typeof e === 'string' || e instanceof String
           ? e.toString()
           : 'An unknown error occurred';
-      showErrorToast('Login failed!', message);
+      showToast('Login failed!', message, ToastType.Error);
     }
   };
 
