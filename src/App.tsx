@@ -48,7 +48,9 @@ export function App() {
       await login(account.username, account.password);
     } catch (e) {
       const message =
-        e instanceof String ? e.toString() : 'An unknown error occurred';
+        typeof e === 'string' || e instanceof String
+          ? e.toString()
+          : 'An unknown error occurred';
       showErrorToast('Login failed!', message);
     }
   };
