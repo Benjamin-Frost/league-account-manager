@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api';
 import { readTextFile } from '@tauri-apps/api/fs';
 import { join, sep } from '@tauri-apps/api/path';
+import { RankedStats } from '../interfaces/ranked';
 
 interface Session {
   username: string;
@@ -8,19 +9,6 @@ interface Session {
 
 interface Summoner {
   displayName: string;
-}
-
-interface RankedQueue {
-  tier: string;
-  division: string;
-  leaguePoints: number;
-  wins: number;
-  losses: number;
-  queueType: string;
-}
-
-interface RankedStats {
-  queues: RankedQueue[];
 }
 
 const parseLockfile = async () => {
@@ -57,13 +45,18 @@ export const getAccountInfo = async () => {
     secret,
   });
 
-  const soloRankedStats = rankedStats.queues.find(
+  const rankedSolo = rankedStats.queues.find(
     (queue) => queue.queueType === 'RANKED_SOLO_5x5'
+  );
+
+  const rankedFlex = rankedStats.queues.find(
+    (queue) => queue.queueType === 'RANKED_FLEX_SR'
   );
 
   return {
     username: session.username,
     summonerName: summoner.displayName,
-    rankedStats: soloRankedStats,
+    rankedSolo,
+    rankedFlex,
   };
 };

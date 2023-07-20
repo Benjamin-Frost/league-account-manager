@@ -5,6 +5,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { Account } from '../interfaces/account';
+import { RankedQueue } from '../interfaces/ranked';
 import { accountToClipboard } from '../utils/clipboard';
 import { ToastType, showToast } from './toast';
 
@@ -15,24 +16,12 @@ interface AccountsTableProps {
   onDeleteClick: (index: number) => void;
 }
 
-const eloToString = (account: Account) => {
-  if (
-    account.tier === undefined ||
-    account.division === undefined ||
-    account.lp === undefined
-  ) {
-    return '–';
-  }
-
-  return `${account.tier} ${account.division} ${account.lp} LP`;
-};
-
-const winLossToString = (account: Account) => {
-  if (account.wins === undefined || account.losses === undefined) {
-    return '–';
-  }
-
-  return `${account.wins}/${account.losses}`;
+const rankedQueueToString = (rq?: RankedQueue) => {
+  if (rq === undefined) return '–';
+  const winrate = (rq.wins / (rq.wins + rq.losses)) * 100;
+  return `${rq.tier} ${rq.division} ${rq.leaguePoints} LP – ${rq.wins}/${
+    rq.losses
+  } (${winrate.toFixed(0)}%)`;
 };
 
 export function AccountsTable({
@@ -67,25 +56,19 @@ export function AccountsTable({
             scope="col"
             className="px-3 py-3.5 text-left text-sm font-semibold text-white"
           >
-            Password
-          </th>
-          <th
-            scope="col"
-            className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-          >
             Summoner Name
           </th>
           <th
             scope="col"
             className="px-3 py-3.5 text-left text-sm font-semibold text-white"
           >
-            Elo
+            Ranked Solo
           </th>
           <th
             scope="col"
             className="px-3 py-3.5 text-left text-sm font-semibold text-white"
           >
-            W/L
+            Ranked Flex
           </th>
           <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
             <span className="sr-only">Actions</span>
@@ -112,16 +95,13 @@ export function AccountsTable({
               {account.username}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {account.password}
-            </td>
-            <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
               {account.summonerName ?? '–'}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {eloToString(account)}
+              {rankedQueueToString(account.rankedSolo)}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {winLossToString(account)}
+              {rankedQueueToString(account.rankedFlex)}
             </td>
             <td className="relative whitespace-nowrap space-x-2 py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
               <button

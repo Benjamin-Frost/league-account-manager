@@ -39,13 +39,8 @@ export function App() {
         if (index !== -1) {
           newAccounts[index] = {
             ...newAccounts[index],
+            ...accountInfo,
             isLoggedIn: true,
-            summonerName: accountInfo.summonerName,
-            tier: accountInfo.rankedStats?.tier,
-            division: accountInfo.rankedStats?.division,
-            lp: accountInfo.rankedStats?.leaguePoints,
-            wins: accountInfo.rankedStats?.wins,
-            losses: accountInfo.rankedStats?.losses,
           };
         }
       } catch (e) {}
