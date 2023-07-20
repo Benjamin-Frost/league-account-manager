@@ -138,7 +138,7 @@ export function AccountsTable({
                 onClick={() => onToClipboardClick(account)}
               >
                 <DocumentDuplicateIcon className="w-5 h-5" />
-                <span className="sr-only">Edit {account.username}</span>
+                <span className="sr-only">Copy {account.username}</span>
               </button>
               <button
                 type="button"
