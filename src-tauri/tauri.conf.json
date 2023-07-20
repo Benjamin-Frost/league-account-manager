@@ -17,6 +17,10 @@
         "all": false,
         "open": true
       },
+      "clipboard": {
+        "all": false,
+        "writeText": true
+      },
       "fs": {
         "all": false,
         "createDir": true,

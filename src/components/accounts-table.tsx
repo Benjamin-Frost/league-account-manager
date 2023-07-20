@@ -1,9 +1,12 @@
 import {
   ArrowRightCircleIcon,
+  DocumentDuplicateIcon,
   PencilSquareIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { Account } from '../interfaces/account';
+import { accountToClipboard } from '../utils/clipboard';
+import { ToastType, showToast } from './toast';
 
 interface AccountsTableProps {
   accounts: Account[];
@@ -38,6 +41,15 @@ export function AccountsTable({
   onEditClick,
   onDeleteClick,
 }: AccountsTableProps) {
+  const onToClipboardClick = async (account: Account) => {
+    await accountToClipboard(account);
+    showToast(
+      'Copy successful!',
+      'The account credentials were copied to your clipboard.',
+      ToastType.Success
+    );
+  };
+
   return (
     <table className="min-w-full mt-8 divide-y divide-gray-700">
       <thead>
@@ -119,6 +131,14 @@ export function AccountsTable({
               >
                 <ArrowRightCircleIcon className="w-5 h-5" />
                 <span className="sr-only">Login {account.username}</span>
+              </button>
+              <button
+                type="button"
+                className="text-blue-400 hover:text-blue-300"
+                onClick={() => onToClipboardClick(account)}
+              >
+                <DocumentDuplicateIcon className="w-5 h-5" />
+                <span className="sr-only">Edit {account.username}</span>
               </button>
               <button
                 type="button"
