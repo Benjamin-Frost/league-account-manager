@@ -24,10 +24,13 @@ export function App() {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      const newAccounts = [...accounts];
+      newAccounts.forEach((account) => {
+        account.isLoggedIn = false;
+      });
+
       try {
         const accountInfo = await getAccountInfo();
-
-        const newAccounts = [...accounts];
         const index = newAccounts.findIndex(
           (account) => account.username === accountInfo.username
         );
