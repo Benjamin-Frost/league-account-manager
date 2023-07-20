@@ -26,11 +26,27 @@ export function App() {
     const interval = setInterval(async () => {
       try {
         const accountInfo = await getAccountInfo();
-        console.log(accountInfo);
-      } catch (e) {
-        console.error(e);
-      }
-    }, 10000);
+
+        const newAccounts = [...accounts];
+        const index = newAccounts.findIndex(
+          (account) => account.username === accountInfo.username
+        );
+        if (index !== -1) {
+          newAccounts[index] = {
+            ...newAccounts[index],
+            isLoggedIn: true,
+            summonerName: accountInfo.summonerName,
+            tier: accountInfo.rankedStats?.tier,
+            division: accountInfo.rankedStats?.division,
+            lp: accountInfo.rankedStats?.leaguePoints,
+            wins: accountInfo.rankedStats?.wins,
+            losses: accountInfo.rankedStats?.losses,
+          };
+          setAccounts(newAccounts);
+          await storeAccounts(newAccounts);
+        }
+      } catch (e) {}
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 

@@ -3,8 +3,8 @@ export interface Account {
   password: string;
   isLoggedIn?: boolean;
   summonerName?: string;
-  tier?: number;
-  rank?: number;
+  tier?: string;
+  division?: string;
   lp?: number;
   wins?: number;
   losses?: number;

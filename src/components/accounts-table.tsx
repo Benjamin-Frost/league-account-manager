@@ -86,9 +86,9 @@ export function AccountsTable({
               {account.summonerName ?? '–'}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {account.tier && account.rank && account.lp ? (
+              {account.tier && account.division && account.lp ? (
                 <>
-                  {account.tier} {account.rank} {account.lp} LP
+                  {account.tier} {account.division} {account.lp} LP
                 </>
               ) : (
                 '–'
