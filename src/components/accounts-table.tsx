@@ -16,12 +16,12 @@ interface AccountsTableProps {
   onDeleteClick: (index: number) => void;
 }
 
-const rankedQueueToString = (rq?: RankedQueue) => {
-  if (rq === undefined) return '–';
-  const winrate = (rq.wins / (rq.wins + rq.losses)) * 100;
-  return `${rq.tier} ${rq.division} ${rq.leaguePoints} LP – ${rq.wins}/${
-    rq.losses
-  } (${winrate.toFixed(0)}%)`;
+const getRankString = (rq: RankedQueue) =>
+  `${rq.tier} ${rq.division} ${rq.leaguePoints} LP`;
+const getWinLossString = (rq: RankedQueue) => {
+  const winrate =
+    rq.wins + rq.losses === 0 ? 0 : (rq.wins / (rq.wins + rq.losses)) * 100;
+  return `${rq.wins}W / ${rq.losses}L (${winrate.toFixed(0)}%)`;
 };
 
 export function AccountsTable({
@@ -98,10 +98,28 @@ export function AccountsTable({
               {account.summonerName ?? '–'}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {rankedQueueToString(account.rankedSolo)}
+              {account.rankedSolo ? (
+                <>
+                  <div>{getRankString(account.rankedSolo)}</div>
+                  <div className="text-gray-400">
+                    {getWinLossString(account.rankedSolo)}
+                  </div>
+                </>
+              ) : (
+                '–'
+              )}
             </td>
             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-              {rankedQueueToString(account.rankedFlex)}
+              {account.rankedFlex ? (
+                <>
+                  <div>{getRankString(account.rankedFlex)}</div>
+                  <div className="text-gray-400">
+                    {getWinLossString(account.rankedFlex)}
+                  </div>
+                </>
+              ) : (
+                '–'
+              )}
             </td>
             <td className="relative whitespace-nowrap space-x-2 py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
               <button
