@@ -14,6 +14,8 @@ League Account Manager is an account storage and management tool for player with
 ## 🛠️ Tech Stack
 
 - [<img src="https://tauri.app/meta/favicon-32x32.png" width="16" height="16"> Tauri](https://tauri.app/)
+- [<img src="https://vitejs.dev/logo.svg" width="16" height="16"> Vite](https://vitejs.dev/)
+- [<img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="16" height="16"> React](https://react.dev/)
 - [<img src="https://tailwindcss.com/favicons/favicon-32x32.png?v=3" width="16" height="16"> Tailwind](https://tailwindcss.com/)
 
 ## 🤝 Contributing
