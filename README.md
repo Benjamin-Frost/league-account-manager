@@ -20,7 +20,7 @@ League Account Manager is an account storage and management tool for player with
 
 League Account Manager is an open-source project and contributions from the community are welcome!
 
-Please read the [Contributing Guide](CONTRIBUTING.md) to get started
+Please read the [Contributing Guide](CONTRIBUTING.md) to get started.
 
 ## 📝 Disclaimer
 
