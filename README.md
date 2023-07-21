@@ -5,7 +5,7 @@
 
 <br/>
 
-League Account Manager is an account storage and management tool for player with multiple League of Legends accounts. Its primary purpose is to provide users with a swift overview of their account ranks, eliminating the need to constantly switch between them. Additionally, the app streamlines the process of switching accounts by enabling users to log in with just a single click.
+League Account Manager is an account storage and management tool for players with multiple League of Legends accounts. Its primary purpose is to provide users with a swift overview of their account ranks, eliminating the need to constantly switch between them. Additionally, the app streamlines the process of switching accounts by enabling users to log in with just a single click.
 
 ## 📷 Screenshots
 
